@@ -9,9 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "15.1.2"
+    "@nextui-org/react": "^2.6.11",
+    "@tanstack/react-virtual": "^3.11.2",
+    "cloudinary": "^2.5.1",
+    "dotenv": "^16.4.7",
+    "draft-js": "^0.11.7",
+    "firebase": "^11.1.0",
+    "framer-motion": "^11.15.0",
+    "lucide-react": "^0.469.0",
+    "next": "15.1.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-hot-toast": "^2.4.1",
+    "react-quill": "^2.0.0",
+    "swr": "^2.3.0"
   },
   "devDependencies": {
     "postcss": "^8",
