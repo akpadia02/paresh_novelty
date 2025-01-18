@@ -43,9 +43,9 @@ function AdminLayout({ children }) {
                 <Sidebar />
             </div>
             {/* sidebar here bec we need for all page */}
-            <section className='flex-1 flex flex-col min-h-screen'>
+            <section className='flex-1 flex flex-col min-h-screen overflow-auto'>
                 <Header toogleSidebar={toogleSidebar} />
-                <section className='flex-1 bg-white overflow-auto'>{children}</section>
+                <section className='flex-1 bg-white pt-14'>{children}</section>
 
             </section>
         </main>

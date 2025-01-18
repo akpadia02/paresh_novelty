@@ -1,6 +1,4 @@
-"use client"
-
-
+'use client'
 import { db } from '@/lib/firebase';
 import { useProducts } from '@/lib/firestore/products/read';
 import { deleteProduct } from '@/lib/firestore/products/write';
@@ -8,24 +6,22 @@ import { Button, CircularProgress } from '@nextui-org/react';
 import { doc, getDoc } from 'firebase/firestore';
 import { Edit2, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
 function ListView() {
     const { data: products, error, isLoading } = useProducts();
 
     if (isLoading) {
-        return <div>
-            <CircularProgress />
-        </div>
+        return <div><CircularProgress /></div>;
     }
 
     if (error) {
-        return <div>{error}</div>
+        return <div>{error}</div>;
     }
 
     return (
-        <div className='flex-1 md:pr-5 md:px-0 px-5 rounded-xl flex flex-col gap-3'>
+        <div className='flex-1 md:pr-5 md:px-0 px-5 rounded-xl flex flex-col gap-3 w-full overflow-x-auto'>
             <table className='border-separate border-spacing-y-3'>
                 <thead>
                     <tr>
@@ -43,20 +39,18 @@ function ListView() {
                     {products?.map((item, index) => {
                         return (
                             <Row index={index} item={item} key={item.id} />
-                        )
+                        );
                     })}
                 </tbody>
-
             </table>
         </div>
-    )
+    );
 }
 
-export default ListView
+export default ListView;
 
 
 function Row({ item, index }) {
-
     const [isDeleting, setIsDeleting] = useState(false);
     const router = useRouter();
 
@@ -77,11 +71,9 @@ function Row({ item, index }) {
 
             const productData = productDoc.data();
             const featureImageUrl = productData?.featureImageUrl;
-            //console.log(item?.featureImageUrl);
 
             if (featureImageUrl) {
                 // Extract the public_id from the image URL (Cloudinary URL format)
-                // Assuming the URL is in the format: https://res.cloudinary.com/dcvc04m9h/image/upload/v1735724898/categories/ipgl0cv2gntmjgt3vnbq.jpg
                 const publicId = featureImageUrl.split('/').slice(-2).join('/').split('.')[0];
 
                 // Call API route to delete the image from Cloudinary
@@ -110,25 +102,30 @@ function Row({ item, index }) {
 
     const handleUpdate = () => {
         router.push(`/admin/products/form?id=${item?.id}`);
-    }
+    };
 
     return (
         <tr>
             <td className='border-y bg-[#fbe1e3] px-3 py-2 border-l rounded-l-lg text-center'>{index + 1}</td>
             <td className='border-y bg-[#fbe1e3] px-3 py-2'>
                 <div className='flex justify-center'>
+                    {console.log("Item data:", item)} {/* Log the entire item */}
+                    {console.log("Image URL:", item?.featureImageUrl)}  {/* Log the image URL */}
                     <img
                         src={item?.featureImageUrl}
                         alt="Product Image"
                         className="h-10 w-9 object-cover"
-                        onError={(e) => (e.target.src = '/placeholder-image.png')} // Optional fallback image
+                        onError={(e) => {
+                            console.log("Image failed to load.");
+                        }}
+                        onLoad={() => console.log("Image loaded successfully:", item?.featureImageUrl)}
                     />
-                    <p>{item?.featureImageUrl}</p>
-
                 </div>
+
+
             </td>
-            <td className='border-y bg-[#fbe1e3] px-3 py-2'>{item?.title}</td>
-            <td className='border-y bg-[#fbe1e3] px-3 py-2'>
+            <td className='border-y bg-[#fbe1e3] px-3 py-2 whitespace-nowrap'>{item?.title}</td>
+            <td className='border-y bg-[#fbe1e3] px-3 py-2 whitespace-nowrap'>
                 {item?.salePrice < item?.price && (
                     <span className='text-xs text-gray-500 line-through'>
                         ₹ {item?.price}
