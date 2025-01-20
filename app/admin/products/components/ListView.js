@@ -6,11 +6,40 @@ import { Button, CircularProgress } from '@nextui-org/react';
 import { doc, getDoc } from 'firebase/firestore';
 import { Edit2, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 function ListView() {
-    const { data: products, error, isLoading } = useProducts();
+    const [pageLimit, setPageLimit] = useState(3);
+    const [lastSnapDocList, setLastSnapDocList] = useState([]);
+
+    useEffect(()=>{
+        setLastSnapDocList([]);
+    },[pageLimit]);
+
+    const {
+        data: products,
+        error,
+        isLoading,
+        lastSnapDoc
+    } = useProducts({
+        pageLimit: pageLimit,
+        lastSnapDoc: lastSnapDocList?.length === 0
+            ? null
+            : lastSnapDocList[lastSnapDocList?.length - 1]
+    });
+
+    const handleNextPage=()=>{
+        let newStack=[...lastSnapDocList];
+        newStack.push(lastSnapDoc);
+        setLastSnapDocList(newStack);
+    }
+
+    const handlePrevPage=()=>{
+        let newStack=[...lastSnapDocList];
+        newStack.pop();
+        setLastSnapDocList(newStack);
+    }
 
     if (isLoading) {
         return <div><CircularProgress /></div>;
@@ -38,11 +67,30 @@ function ListView() {
                 <tbody>
                     {products?.map((item, index) => {
                         return (
-                            <Row index={index} item={item} key={item.id} />
+                            <Row 
+                            index={index + lastSnapDocList?.length*pageLimit} 
+                            item={item} 
+                            key={item.id} />
                         );
                     })}
                 </tbody>
             </table>
+            <div className='flex justify-between py-3'>
+                <Button isDisabled={isLoading || lastSnapDocList?.length === 0} className='bg-[#fbe1e3] font-semibold' onPress={handlePrevPage}>Previous</Button>
+                <select
+                    className='px-5 rounded-xl bg-[#fbe1e3]'
+                    name='perpage'
+                    id='perpage'
+                    value={pageLimit}
+                    onChange={(e) => setPageLimit(e.target.value)}>
+                    <option value={3}>3 Items</option>
+                    <option value={5}>5 Items</option>
+                    <option value={10}>10 Items</option>
+                    <option value={20}>20 Items</option>
+                    <option value={100}>100 Items</option>
+                </select>
+                <Button isDisabled={isLoading || products?.length < pageLimit || !lastSnapDoc} className='bg-[#fbe1e3] font-semibold' onPress={handleNextPage}>Next</Button>
+            </div>
         </div>
     );
 }
