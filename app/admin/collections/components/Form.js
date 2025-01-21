@@ -1,10 +1,12 @@
 "use client"
 import { Button } from '@nextui-org/react'
 import React, { use, useEffect, useState } from 'react'
-import { createNewCategory, updateCategory } from "@/lib/firestore/categories/write";
 import toast from 'react-hot-toast';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getCategory } from '@/lib/firestore/categories/read_server';
+import { getCollection } from '@/lib/firestore/collections/read_server';
+import { createNewCollection, updateCollection } from '@/lib/firestore/collections/write';
+import { useProduct, useProducts } from '@/lib/firestore/products/read';
+import { X } from 'lucide-react';
 
 
 
@@ -12,6 +14,7 @@ function Form() {
     const [data, setData] = useState(null);
     const [image, setImage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const { data: products } = useProducts({ pageLimit: 2000 })
 
     const searchParams = useSearchParams();
     const id = searchParams.get("id");
@@ -20,9 +23,9 @@ function Form() {
 
     const fetchData = async () => {
         try {
-            const res = await getCategory({ id: id });
+            const res = await getCollection({ id: id });
             if (!res) {
-                toast.error("Category Not Found!");
+                toast.error("Collection Not Found!");
             } else {
                 setData(res);
             }
@@ -58,7 +61,7 @@ function Form() {
         reader.readAsDataURL(image);
         reader.onload = async () => {
             try {
-                await createNewCategory({
+                await createNewCollection({
                     data,
                     image: reader.result, // Pass the base64 string
                 });
@@ -81,95 +84,95 @@ function Form() {
             console.log("Update already in progress");
             return;
         }
-    
+
         console.log("handleUpdate triggered");
-    
-        if (!data?.name || !data?.slug) {
-            toast.error("Name and slug are required");
+
+        if (!data?.title) {
+            toast.error("Title is required");
             return;
         }
-    
+
         if (!data?.id) {
             toast.error("Invalid category ID");
             return;
         }
-    
+
         setIsLoading(true);
-    
+
         try {
             let base64Image = null;
-    
+
             if (image) {
                 const reader = new FileReader();
                 const base64Promise = new Promise((resolve, reject) => {
                     reader.onload = () => resolve(reader.result);
                     reader.onerror = () => reject("Failed to read image");
                 });
-    
+
                 reader.readAsDataURL(image);
                 base64Image = await base64Promise;
             }
-    
-            console.log("Updating category with:", data);
-    
-            await updateCategory({
+
+            console.log("Updating collection with:", data);
+
+            await updateCollection({
                 data,
                 image: base64Image,
             });
-    
-            toast.success("Category updated successfully.");
+
+            toast.success("Collection updated successfully.");
             setData(null);
             setImage(null);
-            router.push(`/admin/categories`);
+            router.push(`/admin/collections`);
         } catch (error) {
-            console.error("Error updating category:", error);
-            toast.error(error.message || "Failed to update category.");
+            console.error("Error updating collection:", error);
+            toast.error(error.message || "Failed to update collection.");
         } finally {
             setIsLoading(false);
             console.log("Update process completed");
         }
     };
-    
-      
+
+
 
 
 
     return (
-        <div className='flex flex-col gap-3 bg-[#fbe1e3] rounded-xl p-6 w-full md:w-[400px] h-[360px]'>
-            <h1 className='font-semibold'>{id ? "Update" : "Create"} Category</h1>
+        <div className='flex flex-col gap-3 bg-[#fbe1e3] rounded-xl p-6 w-full md:w-[400px]'>
+            <h1 className='font-semibold'>{id ? "Update" : "Create"} Collection </h1>
             <form className='flex flex-col gap-3'
                 onSubmit={(e) => {
                     e.preventDefault();
                     if (id) {
                         handleUpdate();
-                    }else{
+                    } else {
                         handleCreate();
                     }
                 }}>
                 <div className='flex flex-col gap-1'>
-                    <label htmlFor='category-name' className='text-gray-500 text-sm'>Name <span className='text-red-500'>*</span></label>
+                    <label htmlFor='collection-title' className='text-gray-500 text-sm'>Title <span className='text-red-500'>*</span></label>
                     <input
-                        id='category-name'
-                        name='category-name'
+                        id='collection-title'
+                        name='collection-title'
                         type="text"
-                        placeholder='Enter Name'
-                        value={data?.name ?? ""}
+                        placeholder='Enter Title'
+                        value={data?.title ?? ""}
                         onChange={(e) => {
-                            handleData(("name"), e.target.value);
+                            handleData(("title"), e.target.value);
                         }}
                         className='border px-4 py-2 rounded-lg w-full focus:outline-none'
                     />
                 </div>
                 <div className='flex flex-col gap-1'>
-                    <label htmlFor='category-name' className='text-gray-500 text-sm'>Slug <span className='text-red-500'>*</span></label>
+                    <label htmlFor='collection-sub-title' className='text-gray-500 text-sm'>Sub Title <span className='text-red-500'>*</span></label>
                     <input
-                        id='category-slug'
-                        name='category-slug'
+                        id='collection-sub-title'
+                        name='collection-sub-title'
                         type="text"
-                        placeholder='Enter Slug'
-                        value={data?.slug ?? ""}
+                        placeholder='Enter Sub Title'
+                        value={data?.subTitle ?? ""}
                         onChange={(e) => {
-                            handleData(("slug"), e.target.value);
+                            handleData(("subTitle"), e.target.value);
                         }}
                         className='border px-4 py-2 rounded-lg w-full focus:outline-none'
                     />
@@ -193,6 +196,42 @@ function Form() {
                         className='border px-4 py-2 rounded-lg w-full focus:outline-none'
                     />
                 </div>
+                <div className="flex flex-wrap gap-3">
+                    {data?.products?.map((productId) => {
+                        return (
+                            <ProductCard
+                                productId={productId}
+                                key={productId}
+                                setData={setData}
+                            />
+                        );
+                    })}
+                </div>
+                <div className='flex flex-col gap-1'>
+                    <label htmlFor='collection-products' className='text-gray-500 text-sm'> Select Product <span className='text-red-500'>*</span></label>
+                    <select
+                        id='collection-products'
+                        name='collection-products'
+                        type="text"
+                        onChange={(e) => {
+                            setData((prevData) => {
+                                let list = [...(prevData?.products ?? [])];
+                                list.push(e.target.value);
+                                return {
+                                    ...prevData,
+                                    products: list,
+                                }
+                            })
+                        }}
+                        className='border px-4 py-2 rounded-lg w-full focus:outline-none'
+                    >
+                        <option value="">Select Product</option>
+                        {products?.map((item) => {
+                            return <option  disabled={data?.products?.includes(item?.id)} value={item?.id}>{item?.title}</option>
+                        })}
+                    </select>
+                </div>
+
                 <Button isLoading={isLoading} isDisabled={isLoading} className='bg-[#FEC4C7]' type='submit'>
                     {id ? "Update" : "Create"}
                 </Button>
@@ -202,3 +241,28 @@ function Form() {
 }
 
 export default Form
+
+
+function ProductCard({ productId, setData }) {
+    const { data: product } = useProduct({ productId: productId });
+    return (
+      <div className="flex gap-3 bg-[#FEC4C7] px-4 py-1 rounded-full text-sm">
+        <h2>{product?.title}</h2>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setData((prevData) => {
+              let list = [...prevData?.products];
+              list = list?.filter((item) => item != productId);
+              return {
+                ...prevData,
+                products: list,
+              };
+            });
+          }}
+        >
+          <X size={12} />
+        </button>
+      </div>
+    );
+  }
