@@ -1,10 +1,13 @@
 "use client";
+import { getAllProducts } from "@/lib/firestore/products/read_server";
 import { Rating } from "@mui/material";
 import { Button } from "@nextui-org/react";
 import { Heart, ShoppingCart } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 function FeaturedProducts({ featuredProducts }) {
+    const router = useRouter();
     return (
         <div className="w-full p-5 font-playfair">
             <h2 className="text-2xl font-bold mb-6 text-center">Featured Products</h2>
@@ -76,7 +79,10 @@ function FeaturedProducts({ featuredProducts }) {
                 ))}
             </div>
             <div className="flex justify-center mt-6">
-                <button className="bg-[#FEC4C7] text-white px-6 py-3 rounded-lg text-sm hover:bg-[#fbe1e3] transition-all">
+                <button
+                    className="bg-[#FEC4C7] text-white px-6 py-3 rounded-lg text-sm hover:bg-[#fbe1e3] transition-all"
+                    onClick={() => router.push("/products")} // Navigate to products page
+                >
                     View All Products
                 </button>
             </div>

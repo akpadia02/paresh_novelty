@@ -4,7 +4,7 @@ import Header from "./components/Header";
 import FeaturedCategorySlider from "./components/Sliders";
 import { getAllCategories, getFeaturedCategories } from "@/lib/firestore/categories/read_server";
 import FeaturedProducts from "./components/FeaturedProducts";
-import {  getFeaturedProducts } from "@/lib/firestore/products/read_server";
+import { getFeaturedProducts } from "@/lib/firestore/products/read_server";
 import Footer from "./components/Footer";
 import CategorySlider from "./components/CategorySlider";
 import CustomerReviews from "./components/CustomerReviews";
