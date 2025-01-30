@@ -59,27 +59,27 @@ function Row({ item, index }) {
 
   const handleDelete = async () => {
     if (!confirm("Are you sure?")) return;
-  
+
     setIsDeleting(true);
     try {
       // Get the category document from Firestore
       const categoryRef = doc(db, `categories/${item?.id}`);
       const categoryDoc = await getDoc(categoryRef);
-  
+
       if (!categoryDoc.exists()) {
         toast.error("Category not found");
         setIsDeleting(false);
         return;
       }
-  
+
       const categoryData = categoryDoc.data();
       const imageURL = categoryData?.imageURL;
-  
+
       if (imageURL) {
         // Extract the public_id from the image URL (Cloudinary URL format)
         // Assuming the URL is in the format: https://res.cloudinary.com/dcvc04m9h/image/upload/v1735724898/categories/ipgl0cv2gntmjgt3vnbq.jpg
         const publicId = imageURL.split('/').slice(-2).join('/').split('.')[0];
-  
+
         // Call API route to delete the image from Cloudinary
         const response = await fetch('/api/deleteImage', {
           method: 'POST',
@@ -88,22 +88,22 @@ function Row({ item, index }) {
           },
           body: JSON.stringify({ publicId }),
         });
-  
+
         if (!response.ok) {
           throw new Error("Failed to delete image from Cloudinary");
         }
       }
-  
+
       // Delete the category from Firestore
       await deleteCategory({ id: item?.id });
-  
+
       toast.success("Successfully Deleted");
     } catch (error) {
       toast.error(error.message);
     }
     setIsDeleting(false);
   };
-  
+
   const handleUpdate = () => {
     router.push(`/admin/categories?id=${item?.id}`);
   }
@@ -116,7 +116,7 @@ function Row({ item, index }) {
           <img className='h-10 w-9 object-cover' src={item?.imageURL} alt='' />
         </div>
       </td>
-      <td className='border-y bg-[#fbe1e3] px-3 py-2'>{item.name}</td>
+      <td className='border-y bg-[#fbe1e3] px-3 py-2'>{item.name} {item?.isFeatured === true && <span className='ml-2 bg-gradient-to-tr from-[#e3747d] to-[#fbe1e3] text-[10px] rounded-full px-3 py-1'> Featured </span>}</td>
       <td className='border-y bg-[#fbe1e3] px-3 py-2 border-r rounded-r-lg'>
         <div className='flex gap-2 items-center'>
           <Button onPress={handleUpdate} isIconOnly size='sm'>

@@ -129,7 +129,9 @@ function Sidebar() {
     return ( 
         <section className='sticky top-0 flex flex-col gap-8 bg-[#FEC4C7] border-r px-5 py-3 min-h-screen h-screen overflow-hidden w-[210px] z-[1000]'> 
             <div className='flex justify-center'> 
+                <Link href={`/`}>
                 <img src='/assets/logo.png' alt='logo'></img> 
+                </Link>
             </div> 
             <ul className='flex-1 flex flex-col gap-1 overflow-auto'> 
                 {menuList?.map((item, key) => { 

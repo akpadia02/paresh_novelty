@@ -4,10 +4,10 @@ import { useCategories } from '@/lib/firestore/categories/read';
 import React from 'react'
 
 function BasicDetails({ data, handleData }) {
-    const {data : brands } = useBrands();
-    const {data : categories } = useCategories();
+    const { data: brands } = useBrands();
+    const { data: categories } = useCategories();
     return (
-        <section className='bg-[#fbe1e3] flex-1 flex flex-col gap-3 rounded-xl p-4 border h-[580px]'>
+        <section className='bg-[#fbe1e3] flex-1 flex flex-col gap-3 rounded-xl p-4 border'>
             <h1 className='font-semibold'>Basic Details</h1>
             <div className='flex flex-col gap-1'>
                 <label htmlFor='product-title' className='text-gray-500 text-xs'>Product Title<span className='text-red-500'>*</span></label>
@@ -17,10 +17,10 @@ function BasicDetails({ data, handleData }) {
                     id='product-title'
                     name='product-title'
                     value={data?.title ?? ""}
-                    onChange={(e)=>{
-                        handleData("title",e.target.value);
+                    onChange={(e) => {
+                        handleData("title", e.target.value);
                     }}
-                    className='border px-4 py-2 rounded-lg w-full outline-none' required/>
+                    className='border px-4 py-2 rounded-lg w-full outline-none' required />
             </div>
             <div className='flex flex-col gap-1'>
                 <label htmlFor='product-short-discription' className='text-gray-500 text-xs'>Short Discription<span className='text-red-500'>*</span></label>
@@ -30,10 +30,10 @@ function BasicDetails({ data, handleData }) {
                     id='product-short-discription'
                     name='product-short-discription'
                     value={data?.shortDescription ?? ""}
-                    onChange={(e)=>{
-                        handleData("shortDescription",e.target.value);
+                    onChange={(e) => {
+                        handleData("shortDescription", e.target.value);
                     }}
-                    className='border px-4 py-2 rounded-lg w-full outline-none' required/>
+                    className='border px-4 py-2 rounded-lg w-full outline-none' required />
             </div>
             {/* not required */}
             <div className='flex flex-col gap-1'>
@@ -43,15 +43,15 @@ function BasicDetails({ data, handleData }) {
                     id='product-brand'
                     name='product-brand'
                     value={data?.brandId ?? ""}
-                    onChange={(e)=>{
-                        handleData("brandId",e.target.value);
+                    onChange={(e) => {
+                        handleData("brandId", e.target.value);
                     }}
                     className='border px-4 py-2 rounded-lg w-full outline-none'>
-                        <option value="">Select Brand</option>
-                        {brands?.map((item)=>{
-                            return <option value={item?.id} key={item?.id}>{item?.name}</option>
-                        })}
-                    </select>
+                    <option value="">Select Brand</option>
+                    {brands?.map((item) => {
+                        return <option value={item?.id} key={item?.id}>{item?.name}</option>
+                    })}
+                </select>
             </div>
             <div className='flex flex-col gap-1'>
                 <label htmlFor='product-category' className='text-gray-500 text-xs'>Category<span className='text-red-500'>*</span></label>
@@ -60,15 +60,15 @@ function BasicDetails({ data, handleData }) {
                     id='product-category'
                     name='product-category'
                     value={data?.categoryId ?? ""}
-                    onChange={(e)=>{
-                        handleData("categoryId",e.target.value);
+                    onChange={(e) => {
+                        handleData("categoryId", e.target.value);
                     }}
                     className='border px-4 py-2 rounded-lg w-full outline-none' required>
-                        <option value="">Select Category</option>
-                        {categories?.map((item)=>{
-                            return <option value={item?.id} key={item?.id}>{item?.name}</option>
-                        })}
-                    </select>
+                    <option value="">Select Category</option>
+                    {categories?.map((item) => {
+                        return <option value={item?.id} key={item?.id}>{item?.name}</option>
+                    })}
+                </select>
             </div>
             <div className='flex flex-col gap-1'>
                 <label htmlFor='product-stock' className='text-gray-500 text-xs'>Stock<span className='text-red-500'>*</span></label>
@@ -78,10 +78,10 @@ function BasicDetails({ data, handleData }) {
                     id='product-stock'
                     name='product-stock'
                     value={data?.stock ?? ""}
-                    onChange={(e)=>{
-                        handleData("stock",e.target.valueAsNumber);
+                    onChange={(e) => {
+                        handleData("stock", e.target.valueAsNumber);
                     }}
-                    className='border px-4 py-2 rounded-lg w-full outline-none' required/>
+                    className='border px-4 py-2 rounded-lg w-full outline-none' required />
             </div>
             <div className='flex flex-col gap-1'>
                 <label htmlFor='product-price' className='text-gray-500 text-xs'>Price<span className='text-red-500'>*</span></label>
@@ -91,10 +91,10 @@ function BasicDetails({ data, handleData }) {
                     id='product-price'
                     name='product-price'
                     value={data?.price ?? ""}
-                    onChange={(e)=>{
-                        handleData("price",e.target.valueAsNumber);
+                    onChange={(e) => {
+                        handleData("price", e.target.valueAsNumber);
                     }}
-                    className='border px-4 py-2 rounded-lg w-full outline-none' required/>
+                    className='border px-4 py-2 rounded-lg w-full outline-none' required />
             </div>
             <div className='flex flex-col gap-1'>
                 <label htmlFor='product-sale-price' className='text-gray-500 text-xs'>Sale Price<span className='text-red-500'>*</span></label>
@@ -104,10 +104,26 @@ function BasicDetails({ data, handleData }) {
                     id='product-sale-price'
                     name='product-sale-price'
                     value={data?.salePrice ?? ""}
-                    onChange={(e)=>{
-                        handleData("salePrice",e.target.valueAsNumber);
+                    onChange={(e) => {
+                        handleData("salePrice", e.target.valueAsNumber);
                     }}
-                    className='border px-4 py-2 rounded-lg w-full outline-none' required/>
+                    className='border px-4 py-2 rounded-lg w-full outline-none' required />
+            </div>
+            <div className='flex flex-col gap-1'>
+                <label htmlFor='product-is-feature-product' className='text-gray-500 text-sm'>Is Featured Product? <span className='text-red-500'>*</span></label>
+                <select
+                    id='product-is-feature-product'
+                    name='product-is-feature-product'
+                    type="text"
+                    value={data?.isFeatured ? "yes" : "no"}
+                    onChange={(e) => {
+                        handleData(("isFeatured"), e.target.value === "yes" ? true : false);
+                    }}
+                    className='border px-4 py-2 rounded-lg w-full focus:outline-none'
+                >
+                    <option value={"no"}>No</option>
+                    <option value={"yes"}>Yes</option>
+                </select>
             </div>
         </section>
     )

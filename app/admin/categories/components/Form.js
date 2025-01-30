@@ -81,42 +81,42 @@ function Form() {
             console.log("Update already in progress");
             return;
         }
-    
+
         console.log("handleUpdate triggered");
-    
+
         if (!data?.name || !data?.slug) {
             toast.error("Name and slug are required");
             return;
         }
-    
+
         if (!data?.id) {
             toast.error("Invalid category ID");
             return;
         }
-    
+
         setIsLoading(true);
-    
+
         try {
             let base64Image = null;
-    
+
             if (image) {
                 const reader = new FileReader();
                 const base64Promise = new Promise((resolve, reject) => {
                     reader.onload = () => resolve(reader.result);
                     reader.onerror = () => reject("Failed to read image");
                 });
-    
+
                 reader.readAsDataURL(image);
                 base64Image = await base64Promise;
             }
-    
+
             console.log("Updating category with:", data);
-    
+
             await updateCategory({
                 data,
                 image: base64Image,
             });
-    
+
             toast.success("Category updated successfully.");
             setData(null);
             setImage(null);
@@ -129,20 +129,20 @@ function Form() {
             console.log("Update process completed");
         }
     };
-    
-      
+
+
 
 
 
     return (
-        <div className='flex flex-col gap-3 bg-[#fbe1e3] rounded-xl p-6 w-full md:w-[400px] h-[360px]'>
+        <div className='flex flex-col gap-3 bg-[#fbe1e3] rounded-xl p-6 w-full md:w-[400px] h-[580px]'>
             <h1 className='font-semibold'>{id ? "Update" : "Create"} Category</h1>
             <form className='flex flex-col gap-3'
                 onSubmit={(e) => {
                     e.preventDefault();
                     if (id) {
                         handleUpdate();
-                    }else{
+                    } else {
                         handleCreate();
                     }
                 }}>
@@ -192,6 +192,22 @@ function Form() {
                         type="file"
                         className='border px-4 py-2 rounded-lg w-full focus:outline-none'
                     />
+                </div>
+                <div className='flex flex-col gap-1'>
+                    <label htmlFor='category-is-feature-category' className='text-gray-500 text-sm'>Is Featured Category? <span className='text-red-500'>*</span></label>
+                    <select
+                        id='category-is-feature-category'
+                        name='category-is-feature-category'
+                        type="text"
+                        value={data?.isFeatured ? "yes" : "no"}
+                        onChange={(e) => {
+                            handleData(("isFeatured"), e.target.value === "yes" ? true : false);
+                        }}
+                        className='border px-4 py-2 rounded-lg w-full focus:outline-none'
+                    >
+                        <option value={"no"}>No</option>
+                        <option value={"yes"}>Yes</option>
+                    </select>
                 </div>
                 <Button isLoading={isLoading} isDisabled={isLoading} className='bg-[#FEC4C7]' type='submit'>
                     {id ? "Update" : "Create"}

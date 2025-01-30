@@ -172,7 +172,7 @@ function Row({ item, index }) {
 
 
             </td>
-            <td className='border-y bg-[#fbe1e3] px-3 py-2 whitespace-nowrap'>{item?.title}</td>
+            <td className='border-y bg-[#fbe1e3] px-3 py-2 whitespace-nowrap'>{item?.title}{item?.isFeatured === true && <span className='ml-2 bg-gradient-to-tr from-[#e3747d] to-[#fbe1e3] text-[10px] rounded-full px-3 py-1'> Featured </span>}</td>
             <td className='border-y bg-[#fbe1e3] px-3 py-2 whitespace-nowrap'>
                 {item?.salePrice < item?.price && (
                     <span className='text-xs text-gray-500 line-through'>
