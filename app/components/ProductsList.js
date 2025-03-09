@@ -5,6 +5,7 @@ import Header from "./Header";
 import { Rating } from "@mui/material";
 import { Button } from "@nextui-org/react";
 import { Heart, ShoppingCart } from "lucide-react";
+import Link from "next/link";
 
 export default function ProductsList({ products }) {
     return (
@@ -33,7 +34,8 @@ export default function ProductsList({ products }) {
                                     />
                                 )}
                             </div>
-                            <h3 className="text-lg font-bold text-gray-800 mt-4 text-center">{product.title}</h3>
+                            <Link href={`/products/${product?.id}`}>
+                            <h3 className="text-lg font-bold text-gray-800 mt-4 text-center">{product.title}</h3></Link>
                             <p className="text-gray-500 text-sm text-center">{product.shortDescription}</p>
                             <div className="flex gap-3 items-center mt-4">
                                 <Rating size="small" name="product-rating" defaultValue={2.5} precision={0.5} readOnly />

@@ -36,7 +36,7 @@ function CategorySlider({ categories }) {
       <Slider {...settings}>
         {categories.map((category) => (
           <div key={category._id || category.slug} className="px-2">
-            <Link href={`/list?cat=${category.slug}`}>
+            <Link href={`/categories/${category?.id}`}>
               <div className="relative bg-gray-100 h-60 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300">
                 <Image
                   src={category?.imageURL}
