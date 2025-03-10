@@ -43,7 +43,7 @@ export default function HeaderClientButtons() {
           variant="solid"
           size="sm"
           className="text-black bg-[#FEC4C7] text-[10px] border-none shadow-none"
-          content={data?.favorites?.length ?? 0}
+          content={data?.carts?.length ?? 0}
         >        
             <button
               title="My Cart"

@@ -117,7 +117,7 @@ export default function Page() {
       {(!data?.favorites || data?.favorites?.length === 0) && (
         <div className="flex flex-col gap-5 justify-center items-center h-full w-full py-20">
           <div className="flex justify-center">
-            <img className="h-[200px]" src="/svgs/Empty-pana.svg" alt="" />
+            <img className="h-[400px]" src="/assets/Empty-cuate.svg" alt="" />
           </div>
           <h1 className="text-gray-600 font-semibold">
             Please Add Products To Favorites

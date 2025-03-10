@@ -11,7 +11,7 @@ export default function Layout({ children }) {
         <Header />
         <AuthContextProvider>
             <UserChecking>
-                <section>
+                <section className="min-h-screen">
                     {children}
                 </section>
             </UserChecking>

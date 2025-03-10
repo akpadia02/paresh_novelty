@@ -8,6 +8,7 @@ import { Heart, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import FavoriteButton from "./FavoriteButton";
 import AuthContextProvider from "@/context/AuthContext";
+import AddToCartButton from "./AddToCardButton";
 
 export default function ProductsList({ products }) {
     return (
@@ -55,12 +56,17 @@ export default function ProductsList({ products }) {
                             </div>
                             <div className="flex justify-between items-center mt-2">
                                 <div className="flex items-center gap-6">
-                                    <button className="bg-[#FEC4C7] flex-1 px-4 py-2 rounded-full text-white hover:bg-[#fbe1e3] transition-all">
-                                        Buy Now
-                                    </button>
-                                    <Button isIconOnly size="sm" variant="bordered" className="border border-[#FEC4C7] text-[#FEC4C7] bg-transparent hover:bg-[#fbe1e3] transition-all">
+                                    <Link href={`/checkout?type=buynow&productId=${product?.id}`}>
+                                        <button className="bg-[#FEC4C7] flex-1 px-4 py-2 rounded-full text-white hover:bg-[#fbe1e3] transition-all">
+                                            Buy Now
+                                        </button>
+                                    </Link>
+                                    {/* <Button isIconOnly size="sm" variant="bordered" className="border border-[#FEC4C7] text-[#FEC4C7] bg-transparent hover:bg-[#fbe1e3] transition-all">
                                         <ShoppingCart size={20} />
-                                    </Button>
+                                    </Button> */}
+                                    <AuthContextProvider>
+                                        <AddToCartButton productId={product?.id} />
+                                    </AuthContextProvider>
                                     <AuthContextProvider>
                                         <FavoriteButton productId={product?.id} />
                                     </AuthContextProvider>
