@@ -15,7 +15,7 @@ function page() {
 
     useEffect(() => {
         if (user) {
-            router.push("/dashboard");
+            router.push("/account");
         }
     }, [user]);
 

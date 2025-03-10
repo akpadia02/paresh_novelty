@@ -1,4 +1,5 @@
 "use client";
+import AuthContextProvider from "@/context/AuthContext";
 import { getAllProducts } from "@/lib/firestore/products/read_server";
 import { Rating } from "@mui/material";
 import { Button } from "@nextui-org/react";
@@ -6,6 +7,7 @@ import { Heart, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import FavoriteButton from "./FavoriteButton";
 
 function FeaturedProducts({ featuredProducts }) {
     const router = useRouter();
@@ -67,13 +69,16 @@ function FeaturedProducts({ featuredProducts }) {
                                 >
                                     <ShoppingCart size={20} />
                                 </Button>
-                                <Button
+                                {/* <Button
                                     isIconOnly
                                     size="sm"
                                     className="border border-[#FEC4C7] text-[#FEC4C7] bg-transparent hover:bg-[#fbe1e3] transition-all"
                                 >
                                     <Heart size={20} />
-                                </Button>
+                                </Button> */}
+                                <AuthContextProvider>
+                                    <FavoriteButton productId={product?.id} />
+                                </AuthContextProvider>
                             </div>
 
                         </div>

@@ -1,6 +1,7 @@
 import { getCategory } from '@/lib/firestore/categories/read_server'
 import { Button } from '@nextui-org/react'
 import { Heart, ShoppingCart } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
 function Details({ product }) {
@@ -53,10 +54,12 @@ export default Details
 async function Category({ categoryId }) {
     const category = await getCategory({ id: categoryId })
     return (
-        <div className='flex items-center gap-2 px-3 py-1 rounded-full bg-[#fbe1e3] border'>
-            <img className='h-5 rounded-full' src={category?.imageURL} alt='' />
-            <h4 className='text-sm'>{category?.name}</h4>
-        </div>
+        <Link href={`/categories/${categoryId}`}>
+            <div className='flex items-center gap-2 px-3 py-1 rounded-full bg-[#fbe1e3] border'>
+                <img className='h-5 rounded-full' src={category?.imageURL} alt='' />
+                <h4 className='text-sm'>{category?.name}</h4>
+            </div>
+        </Link>
     )
 
 }

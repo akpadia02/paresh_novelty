@@ -6,6 +6,8 @@ import { Rating } from "@mui/material";
 import { Button } from "@nextui-org/react";
 import { Heart, ShoppingCart } from "lucide-react";
 import Link from "next/link";
+import FavoriteButton from "./FavoriteButton";
+import AuthContextProvider from "@/context/AuthContext";
 
 export default function ProductsList({ products }) {
     return (
@@ -35,7 +37,7 @@ export default function ProductsList({ products }) {
                                 )}
                             </div>
                             <Link href={`/products/${product?.id}`}>
-                            <h3 className="text-lg font-bold text-gray-800 mt-4 text-center">{product.title}</h3></Link>
+                                <h3 className="text-lg font-bold text-gray-800 mt-4 text-center">{product.title}</h3></Link>
                             <p className="text-gray-500 text-sm text-center">{product.shortDescription}</p>
                             <div className="flex gap-3 items-center mt-4">
                                 <Rating size="small" name="product-rating" defaultValue={2.5} precision={0.5} readOnly />
@@ -59,9 +61,9 @@ export default function ProductsList({ products }) {
                                     <Button isIconOnly size="sm" variant="bordered" className="border border-[#FEC4C7] text-[#FEC4C7] bg-transparent hover:bg-[#fbe1e3] transition-all">
                                         <ShoppingCart size={20} />
                                     </Button>
-                                    <Button isIconOnly size="sm" className="border border-[#FEC4C7] text-[#FEC4C7] bg-transparent hover:bg-[#fbe1e3] transition-all">
-                                        <Heart size={20} />
-                                    </Button>
+                                    <AuthContextProvider>
+                                        <FavoriteButton productId={product?.id} />
+                                    </AuthContextProvider>
                                 </div>
                             </div>
                         </div>

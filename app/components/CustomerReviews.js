@@ -4,24 +4,28 @@ import Rating from '@mui/material/Rating';
 
 const list = [
     {
+        id: 1, // ✅ Added unique id
         name: "Lorem ipsum",
-        message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
         rating: 4.5,
         imageUrl: "https://i.postimg.cc/j5x7BkHZ/person.jpg"
     },
     {
+        id: 2, // ✅ Added unique id
         name: "Lorem ipsum",
-        message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
         rating: 4.0,
         imageUrl: "https://i.postimg.cc/j5x7BkHZ/person.jpg"
     },
     {
+        id: 3, // ✅ Added unique id
         name: "Lorem ipsum",
-        message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
         rating: 3.5,
         imageUrl: "https://i.postimg.cc/j5x7BkHZ/person.jpg"
     },
-]
+];
+
 
 function CustomerReviews() {
     return (

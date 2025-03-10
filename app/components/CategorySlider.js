@@ -32,7 +32,9 @@ function CategorySlider({ categories }) {
 
   return (
     <div className="py-10 px-4 md:px-16 bg-[#f8f8f8] font-playfair">
-      <h2 className="text-2xl font-bold mb-6 text-center">Categories</h2>
+      <section id="category-slider">
+        <h2 className="text-2xl font-bold mb-6 text-center">Categories</h2>
+      </section>
       <Slider {...settings}>
         {categories.map((category) => (
           <div key={category._id || category.slug} className="px-2">
