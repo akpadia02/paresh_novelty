@@ -4,28 +4,18 @@ import { useAuth } from '@/context/AuthContext';
 import { auth } from '@/lib/firebase'
 import { createUser } from '@/lib/firestore/users/write';
 import { Button } from '@nextui-org/react'
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile } from 'firebase/auth';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
+import { displayName } from 'react-quill';
 
 function page() {
     const { user } = useAuth();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState({});
-
-    const handleLogin = async () => {
-        setIsLoading(true);
-        try {
-            await signInWithEmailAndPassword(auth, data?.email, data?.password);
-            toast.success("Logged In SuccessFully.");
-        } catch (error) {
-            toast.error(error?.message);
-        }
-        setIsLoading(false);
-    }
 
     const handleData = (key, value) => {
         setData({
@@ -34,11 +24,32 @@ function page() {
         });
     };
 
-    useEffect(() => {
-        if (user) {
-            router.push("/account");
+    const handleSignUp = async () => {
+        setIsLoading(true);
+        try {
+            //signUp
+            const credential = await createUserWithEmailAndPassword(
+                auth,
+                data?.email,
+                data?.password
+            );
+            await updateProfile(credential.user,{
+                displayName:data?.name,
+            });
+            const user=credential?.user;
+            await createUser({
+                uid:user?.uid,
+                displayName:data?.name,
+                photoURL:user?.photoURL,
+            });
+            toast.success("SuccessFully Signed Up.")
+            router.push('/account');
+        } catch (error) {
+            toast.error(error?.message);
         }
-    }, [user]);
+        setIsLoading(false);
+    }
+
 
     return (
         // w-full flex justify-center items-center bg-gray-300 p-24 min-h-screen //center a div
@@ -48,11 +59,21 @@ function page() {
                     <img src='/assets/logo.png' alt='logo' className='h-15'></img>
                 </div>
                 <div className='flex flex-col gap-3 bg-[#FEC4C7] md:p-10 p-5 rounded-xl md:min-w-[440px] w-full'>
-                    <h1 className='font-bold text-xl'>Login with Email</h1>
-                    <form onSubmit={(e)=>{
+                    <h1 className='font-bold text-xl'>Sign Up with Email</h1>
+                    <form onSubmit={(e) => {
                         e.preventDefault();
-                        handleLogin();
+                        handleSignUp();
                     }} className='flex flex-col gap-3'>
+                        <input
+                            placeholder="Enter your Name"
+                            type="text"
+                            name='user-name'
+                            id='user-name'
+                            value={data?.name}
+                            onChange={(e) => {
+                                handleData('name', e.target.value);
+                            }}
+                            className='px-3 py-2 rounded-xl border focus:outline-none w-full' />
                         <input
                             placeholder="Enter your Email"
                             type="email"
@@ -73,48 +94,18 @@ function page() {
                                 handleData('password', e.target.value);
                             }}
                             className='px-3 py-2 rounded-xl border focus:outline-none w-full' />
-                        <Button isLoading={isLoading} isDisabled={isLoading} type='submit' className='bg-white'>Login</Button>
+                        <Button isLoading={isLoading} isDisabled={isLoading} type='submit' className='bg-white'>Sign Up</Button>
                     </form>
                     <div className='flex justify-between'>
-                        <Link href={'/sign-up'}>
-                            <button className='font-semibold md:text-sm text-xs'>Create Account</button>
-                        </Link>
-                        <Link href={'/forget-passward'}>
-                            <button className='font-semibold md:text-sm text-xs'>Forget Password?</button>
+                        <Link href={'/login'}>
+                            <button className='font-semibold md:text-sm text-xs'>Already User? Sign In.</button>
                         </Link>
                     </div>
-                    <hr />
-                    <SignWithGoogleComponent />
                 </div>
             </section>
         </main>
     )
 }
 
-function SignWithGoogleComponent() {
-    const [isLoading, setIsLoading] = useState(false);
-    const handleLogin = async () => {
-        setIsLoading(true);
-        try {
-            const credential = await signInWithPopup(auth, new GoogleAuthProvider());
-            const user = credential?.user;
-            await createUser({
-                uid: user?.uid,
-                displayName: user?.displayName,
-                photoURL: user?.photoURL,
-            });
-        } catch (error) {
-            toast.error(error?.message);
-        }
-        setIsLoading(false);
-
-    };
-    return <>
-        <Button isLoading={isLoading} isDisabled={isLoading} onPress={handleLogin} className="bg-white">
-            <img src="assets/google.png" className="h-6" alt="Google Logo" />Sign in with Google
-        </Button>
-
-    </>
-}
 
 export default page
