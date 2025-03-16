@@ -37,15 +37,24 @@ export default function AddToCartButton({ productId }) {
                 router.push("/login");
                 throw new Error("Please Logged In First!");
             }
-            if (data?.carts?.includes(productId)) {
-                const newList = data?.carts?.filter((item) => item != productId);
+            // if (data?.carts?.includes(productId)) {
+            //     const newList = data?.carts?.filter((item) => item != productId);
+            //     await updateCarts({ list: newList, uid: user?.uid });
+            // } else {
+            //     await updateCarts({
+            //         list: [...(data?.carts ?? []), { id: productId, quantity: 1 }],
+            //         uid: user?.uid,
+            //     });
+            // }
+            if (data?.carts?.some((item) => item.id === productId)) {
+                const newList = data?.carts?.filter((item) => item.id !== productId);
                 await updateCarts({ list: newList, uid: user?.uid });
             } else {
                 await updateCarts({
                     list: [...(data?.carts ?? []), { id: productId, quantity: 1 }],
                     uid: user?.uid,
                 });
-            }
+            }            
         } catch (error) {
             toast.error(error?.message);
         }

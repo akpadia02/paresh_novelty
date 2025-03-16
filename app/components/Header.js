@@ -23,7 +23,7 @@ function Header() {
     return (
         <nav className='sticky top-0 z-50 py-1 px-4 md:py-3 md:px-16 border-b flex items-center justify-between bg-white'>
             <Link href='/'><img src='/assets/logo.png' className='h-10 md:h-12' alt='Logo' /></Link>
-            <div className='flex gap-3 items-center font-playfair text-lg'>
+            <div className='hidden sm:flex gap-3 items-center font-playfair text-lg'>
                 {menuList?.map((item, index) => (
                     <Link key={index} href={item?.link}>
                         <button className='text-lg px-2 py-2 rounded-lg hover:bg-[#FEC4C7]'>{item?.name}</button>

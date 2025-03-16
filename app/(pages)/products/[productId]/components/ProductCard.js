@@ -1,6 +1,10 @@
+import AddToCartButton from "@/app/components/AddToCardButton";
+import FavoriteButton from "@/app/components/FavoriteButton";
+import AuthContextProvider from "@/context/AuthContext";
 import { Rating } from "@mui/material";
 import { Button } from "@nextui-org/react";
 import { ShoppingCart, Heart } from "lucide-react";
+import Link from "next/link";
 
 export function ProductCard({ product }) {
     return (
@@ -40,15 +44,23 @@ export function ProductCard({ product }) {
                     </div>
                     <div className="flex justify-between items-center mt-2">
                         <div className="flex items-center gap-6">
-                            <button className="bg-[#FEC4C7] flex-1 px-2 py-2 rounded-full text-white hover:bg-[#fbe1e3] transition-all">
-                                Buy Now
-                            </button>
-                            <Button isIconOnly size="sm" variant="bordered" className="border border-[#FEC4C7] text-[#FEC4C7] bg-transparent hover:bg-[#fbe1e3] transition-all">
+                            <Link href={`/checkout?type=buynow&productId=${product?.id}`}>
+                                <button className="bg-[#FEC4C7] flex-1 px-2 py-2 rounded-full text-white hover:bg-[#fbe1e3] transition-all">
+                                    Buy Now
+                                </button>
+                            </Link>
+                            {/* <Button isIconOnly size="sm" variant="bordered" className="border border-[#FEC4C7] text-[#FEC4C7] bg-transparent hover:bg-[#fbe1e3] transition-all">
                                 <ShoppingCart size={20} />
                             </Button>
                             <Button isIconOnly size="sm" className="border border-[#FEC4C7] text-[#FEC4C7] bg-transparent hover:bg-[#fbe1e3] transition-all">
                                 <Heart size={20} />
-                            </Button>
+                            </Button> */}
+                            <AuthContextProvider>
+                                <AddToCartButton productId={product?.id} />
+                            </AuthContextProvider>
+                            <AuthContextProvider>
+                                <FavoriteButton productId={product?.id} />
+                            </AuthContextProvider>
                         </div>
                     </div>
                 </div>

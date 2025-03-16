@@ -15,6 +15,7 @@
     "@mui/material": "^6.4.7",
     "@nextui-org/react": "^2.6.11",
     "@tanstack/react-virtual": "^3.11.2",
+    "canvas-confetti": "^1.9.3",
     "cloudinary": "^2.5.1",
     "dotenv": "^16.4.7",
     "draft-js": "^0.11.7",
