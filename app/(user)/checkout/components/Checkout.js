@@ -16,31 +16,100 @@ function Checkout({ productList }) {
         setAddress({ ...(address ?? {}), [key]: value });
     };
 
+    // const handlePlaceOrder = async () => {
+    //     setIsLoading(true);
+    //     try {
+    //         if (totalPrice <= 0) {
+    //             throw new Error("Price should be greater than 0");
+    //         }
+    //         if (!address?.fullName || !address?.mobile || !address?.addressLine1 || !address?.addressLine2 || !address?.city || !address?.pincode || !address?.state || !address?.email) {
+    //             throw new Error("Please Fill All Address Deatils");
+    //         }
+    //         await new Promise((res) => setTimeout(res, 3000)); //delay
+    //         //Create API to place Order
+    //         if(paymentMode === 'prepaid'){
+    //             //razor pay gateway 
+    //         }else{
+    //             //call API to create order with cod
+    //         }
+    //         toast.success("SuccessFully Placed!");
+    //         confetti(); //yolo
+    //         router.push('/account');
+
+    //     } catch (error) {
+    //         toast.error(error?.message);
+    //     }
+    //     setIsLoading(false);
+    // }
     const handlePlaceOrder = async () => {
         setIsLoading(true);
         try {
             if (totalPrice <= 0) {
                 throw new Error("Price should be greater than 0");
             }
-            if (!address?.fullName || !address?.mobile || !address?.addressLine1 || !address?.addressLine2 || !address?.city || !address?.pincode || !address?.state || !address?.email) {
-                throw new Error("Please Fill All Address Deatils");
+            if (!address?.fullName || !address?.mobile || !address?.addressLine1 || !address?.city || !address?.pincode || !address?.state || !address?.email) {
+                throw new Error("Please fill all address details.");
             }
-            await new Promise((res) => setTimeout(res, 3000)); //delay
-            //Create API to place Order
-            if(paymentMode === 'prepaid'){
-                //razor pay gateway 
-            }else{
-                //call API to create order with cod
+    
+            if (paymentMode === 'prepaid') {
+                // Call backend API to create order
+                const response = await fetch("/api/create-order", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ amount: totalPrice * 100, currency: "INR" })
+                });
+    
+                const orderData = await response.json();
+                if (!orderData?.order_id) throw new Error("Failed to create order");
+    
+                // Load Razorpay
+                const script = document.createElement("script");
+                script.src = "https://checkout.razorpay.com/v1/checkout.js";
+                script.async = true;
+                document.body.appendChild(script);
+    
+                script.onload = () => {
+                    const options = {
+                        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY, // Add this in .env.local
+                        amount: totalPrice * 100,
+                        currency: "INR",
+                        order_id: orderData.order_id,
+                        name: "Paresh Novelty",
+                        description: "Order Payment",
+                        handler: function (response) {
+                            console.log(response);
+                            toast.success("Payment Successful!");
+                            confetti();
+                            router.push('/account');
+                        },
+                        prefill: {
+                            name: address.fullName,
+                            email: address.email,
+                            contact: address.mobile,
+                        },
+                        theme: { color: "#FEC4C7" },
+                    };
+                    const rzp = new window.Razorpay(options);
+                    rzp.open();
+                    console.log(pay);
+                };
+            } else {
+                // Call backend API for COD order placement
+                await fetch("/api/place-cod-order", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ address, totalPrice })
+                });
+                toast.success("Order placed successfully!");
+                confetti();
+                router.push('/account');
             }
-            toast.success("SuccessFully Placed!");
-            confetti(); //yolo
-            router.push('/account');
-
         } catch (error) {
             toast.error(error?.message);
         }
         setIsLoading(false);
-    }
+    };
+    
 
     const totalPrice = productList?.reduce((prev, curr) => {
         return prev + curr?.quantity * curr?.product?.salePrice;
