@@ -1,3 +1,46 @@
+# 🛍️ Paresh Novelty – E-Commerce Platform
+
+**Paresh Novelty** is a modern e-commerce website developed for a wholesaler specializing in fancy bindis, bangles, ladies’ novelties, general items, and imitation jewelry. Built using powerful web technologies, the platform ensures a seamless shopping experience, secure payments, and efficient inventory management.
+
+> 👨‍💻 **Developer**: Akshay H. Padia
+
+---
+
+## 🚀 Tech Stack
+
+- **Frontend:** Next.js, Tailwind CSS, lucide-react
+- **Authentication:** Firebase Auth, NextAuth.js
+- **Storage:** Cloudinary (for image uploads), FireBase (information)
+- **Deployment:** Vercel
+
+---
+
+## 💡 Key Features
+
+### 🧑‍💼 User Features
+- ✅ **Modern UI** using Tailwind CSS and Lucide Icons
+- 🛒 **Dynamic product catalog** with filtering and category-wise browsing
+- 🔐 **User authentication** via Firebase and NextAuth
+- 💳 **Secure Stripe payments** with live checkout integration
+- 📱 **Mobile responsive design** for all screen sizes
+
+### 📦 Admin Features
+- 📤 **Image upload** via Cloudinary
+- 🧾 **Inventory and product management** dashboard
+- 🔐 **Admin authentication & route protection**
+- 📊 **Order tracking and status management**
+
+---
+
+## 🧰 Project Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/paresh-novelty.git
+cd paresh-novelty
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
