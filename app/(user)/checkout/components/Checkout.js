@@ -1,17 +1,19 @@
 "use client"
 
-import { createCheckoutCODAndGetId } from '@/lib/firestore/checkout/write';
+// import { createCheckoutCODAndGetId } from '@/lib/firestore/checkout/write';
 import confetti from 'canvas-confetti';
 import { CheckSquare2Icon, Square } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { useAuth } from '@/context/AuthContext';
+import { placeCodOrderWithStockTransaction } from '@/lib/firestore/orders/write';
 
-function Checkout({ productList }) {
-    const [paymentMode, setPaymentMode] = useState("prepaid");
+function Checkout({ productList, sourceType }) {
+    const [paymentMode] = useState("cod");
     const [address, setAddress] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [termsAccepted, setTermsAccepted] = useState(false);
     const router = useRouter();
     const { user } = useAuth();
 
@@ -21,29 +23,32 @@ function Checkout({ productList }) {
     const handlePlaceOrder = async () => {
         setIsLoading(true);
         try {
+            if (!user?.uid) {
+                throw new Error("Please login to place an order.");
+            }
+            if (!productList || productList.length === 0) {
+                throw new Error("Your cart is empty.");
+            }
             if (totalPrice <= 0) {
                 throw new Error("Price should be greater than 0");
             }
             if (!address?.fullName || !address?.mobile || !address?.addressLine1 || !address?.city || !address?.pincode || !address?.state || !address?.email) {
                 throw new Error("Please fill all address details.");
             }
-
-            if (paymentMode === 'prepaid') {
-                // Call backend API to create order
-
-            } else {
-                // Call backend API for COD order placement
-
-                const checkoutId = await createCheckoutCODAndGetId({
-                    uid: user?.uid,
-                    products: productList,
-                    address: address,
-                });
-                router.push(`/checkout-cod?checkout_id=${checkoutId}`);
-                // router.push('/account');
+            if (!termsAccepted) {
+                throw new Error("Please agree with the Terms & Conditions.");
             }
+
+            await placeCodOrderWithStockTransaction({
+                user,
+                productList,
+                address,
+                sourceType: sourceType ?? "cart",
+            });
+
             toast.success("Order placed successfully!");
             confetti();
+            router.push('/account');
         } catch (error) {
             toast.error(error?.message);
         }
@@ -174,16 +179,24 @@ function Checkout({ productList }) {
                     <div className='flex flex-col md:flex-row items-center justify-between'>
                         <h2 className='font-semibold text-xl'>Payment Mode</h2>
                         <div className='flex items-center gap-3'>
-                            <button onClick={() => {
-                                setPaymentMode('prepaid');
-                            }} className='flex items-center gap-1'>{paymentMode === 'prepaid' && <CheckSquare2Icon size={16} className='text-[#FEC4C7]' />} {paymentMode === 'cod' && <Square size={16} />}Prepaid</button>
-                            <button onClick={() => {
-                                setPaymentMode('cod');
-                            }} className='flex items-center gap-1'>{paymentMode === 'prepaid' && <Square size={16} />} {paymentMode === 'cod' && <CheckSquare2Icon size={16} className='text-[#FEC4C7]' />}Cash On Delivery</button>
+                            <button
+                                disabled
+                                className='flex items-center gap-1 cursor-default'
+                            >
+                                <CheckSquare2Icon size={16} className='text-[#FEC4C7]' />
+                                Cash On Delivery
+                            </button>
                         </div>
                     </div>
-                    <div className='flex gap-1 items-center'>
-                        <CheckSquare2Icon size={16} className='text-[#FEC4C7]' />
+                    <div
+                        className='flex gap-1 items-center cursor-pointer'
+                        onClick={() => setTermsAccepted(!termsAccepted)}
+                    >
+                        {termsAccepted ? (
+                            <CheckSquare2Icon size={16} className='text-[#FEC4C7]' />
+                        ) : (
+                            <Square size={16} />
+                        )}
                         <h4 className='text-xs test-gray-600'>I agree with the {" "} <span className='text-[#FEC4C7]'>Terms & Conditions</span></h4>
                     </div>
                     <button disabled={isLoading} onClick={handlePlaceOrder} className="bg-[#FEC4C7] flex-1 px-4 py-2 rounded-full hover:bg-[#fbe1e3] transition-all">

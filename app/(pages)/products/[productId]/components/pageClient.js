@@ -17,9 +17,9 @@ export default function PageClient({ product }) {
         <Details product={product} />
       </section>
       {/* Description & Reviews */}
-      <section>
+      <section className="mt-6">
         {/* <Description product={product} /> */}
-        {/* <Review product={product} /> */}
+        <Review productId={product?.id} />
       </section>
       {/* Related Products */}
       <RelatedProducts categoryId={product?.categoryId} />

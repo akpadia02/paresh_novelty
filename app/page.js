@@ -7,7 +7,6 @@ import FeaturedProducts from "./components/FeaturedProducts";
 import { getFeaturedProducts } from "@/lib/firestore/products/read_server";
 import Footer from "./components/Footer";
 import CategorySlider from "./components/CategorySlider";
-import CustomerReviews from "./components/CustomerReviews";
 import AboutUs from "./components/AboutUs";
 
 export default async function Home() {
@@ -29,7 +28,6 @@ export default async function Home() {
       <FeaturedCategorySlider featuredCategories={featuredCategories}/>
       <FeaturedProducts featuredProducts={featuredProducts}/>
       <CategorySlider categories={categories}/>
-      <CustomerReviews />
       {/* <AboutUs /> */}
       <Footer />
     </main>

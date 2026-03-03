@@ -65,7 +65,7 @@ export default function Page() {
     return <>
         <main className="p-5 flex flex-col gap-4">
             <h1 className="text-xl">Checkout</h1>
-            <Checkout productList={productList}/>
+            <Checkout productList={productList} sourceType={type === 'buynow' ? 'buynow' : 'cart'} />
         </main>
     </>
 }
