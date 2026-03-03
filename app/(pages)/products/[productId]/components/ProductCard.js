@@ -2,8 +2,6 @@ import AddToCartButton from "@/app/components/AddToCardButton";
 import FavoriteButton from "@/app/components/FavoriteButton";
 import AuthContextProvider from "@/context/AuthContext";
 import { Rating } from "@mui/material";
-import { Button } from "@nextui-org/react";
-import { ShoppingCart, Heart } from "lucide-react";
 import Link from "next/link";
 
 export function ProductCard({ product }) {

@@ -1,9 +1,8 @@
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import { NextUIProvider } from "@nextui-org/react";
-import toast, { Toaster } from 'react-hot-toast';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Providers from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +17,7 @@ const geistMono = Geist_Mono({
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
-  weight: ["400", "600"], // Include the weights you need
+  weight: ["400", "600"],
 });
 
 export const metadata = {
@@ -32,11 +31,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased `}
       >
-        <Toaster />
-        <NextUIProvider>
-          {children}
-        </NextUIProvider>
-
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
