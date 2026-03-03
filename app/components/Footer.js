@@ -29,8 +29,8 @@ function Footer() {
                     <h3 className="text-lg font-bold">Quick Links</h3>
                     <ul className="space-y-2">
                         <li><a href="#" className="hover:underline">Home</a></li>
-                        <li><a href="#" className="hover:underline">About Us</a></li>
-                        <li><a href="#" className="hover:underline">Contact Us</a></li>
+                        <li><a href="about" className="hover:underline">About Us</a></li>
+                        <li><a href="contact" className="hover:underline">Contact Us</a></li>
                         <li><a href="#" className="hover:underline">Terms & Conditions</a></li>
                     </ul>
                 </div>
