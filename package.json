@@ -23,7 +23,7 @@
     "firebase-admin": "^13.4.0",
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.469.0",
-    "next": "15.1.2",
+    "next": "^16.1.6",
     "nodemailer": "^8.0.1",
     "razorpay": "^2.9.6",
     "react": "^18.2.0",
